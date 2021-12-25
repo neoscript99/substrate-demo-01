@@ -41,6 +41,7 @@ pub mod pallet {
         ProofAlreadyExist,
         ClaimNotExist,
         NotClaimOwner,
+        ClaimTooLong,
     }
 
     #[pallet::hooks]
@@ -55,6 +56,11 @@ pub mod pallet {
             ensure!(
                 !Proofs::<T>::contains_key(&claim),
                 Error::<T>::ProofAlreadyExist
+            );
+
+            ensure!(
+                claim.len() <= 10,
+                Error::<T>::ClaimTooLong
             );
 
             Proofs::<T>::insert(
